@@ -21,7 +21,7 @@ public class BackgroundTile extends Tile {
     
     @Override
     public void render(int x, int y, GameCanvas frame) {
-        frame.renderPixels(x, y, sprite.getPixels(), sprite.SIZE, Game.SCALE);
+        frame.renderPixels(x, y, sprite.getPixels(), sprite.SIZE, sprite.SIZE,  Game.SCALE);
     }
     
     @Override

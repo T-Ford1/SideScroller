@@ -61,7 +61,7 @@ public class Player extends Mob {
     public void render(GameCanvas screen) {
         super.render(screen);
         Sprite render = animation.getSprite(dir, anim);
-        screen.renderPixels(getRenderX(), getRenderY(), render.getPixels(), render.SIZE, Game.SCALE);
+        screen.renderPixels(getRenderX(), getRenderY(), render.getPixels(), render.SIZE, render.SIZE, Game.SCALE);
     }
 
     /**

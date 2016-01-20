@@ -5,8 +5,7 @@
  */
 package game;
 
-import java.awt.Color;
-import java.awt.Font;
+import display.Display;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
@@ -28,7 +27,7 @@ public class Game extends JFrame {
 
     public static final int SIZE_BIT_MASK = 31;
     public static final int SCALE_BIT_MASK = 1;
-    
+
     public static final int SIZE_BIT_SHIFT = 5;
     public static final int SCALE_BIT_SHIFT = 1;
 
@@ -36,7 +35,8 @@ public class Game extends JFrame {
     private final GameCanvas canvas;
     private final BufferStrategy bs;
     private final GameThread thread;
-    
+    private final Display HUD;
+
     private static final Level level = new NexusLevel("./res/levels/nexus_level_2.png");
 
     public Game() {
@@ -47,8 +47,9 @@ public class Game extends JFrame {
         add(canvas = new GameCanvas());
         pack();
         canvas.initRender();
-        player = new Player(level, canvas.addKeys(), canvas.addMouse(), 50 * SIZE * SCALE, 50 * SIZE * SCALE, 
+        player = new Player(level, canvas.addKeys(), canvas.addMouse(), 50 * SIZE * SCALE, 50 * SIZE * SCALE,
                 canvas.getRenderWidth() / 2 - SIZE, canvas.getRenderHeight() / 2 - SIZE);
+        HUD = new Display(canvas);
         canvas.createBufferStrategy(3);
         bs = canvas.getBufferStrategy();
         thread = new GameThread(this);
@@ -61,14 +62,11 @@ public class Game extends JFrame {
     }
 
     public void render() {
-        //canvas.clear();
         level.render(player.getX() - player.getRenderX(), player.getY() - player.getRenderY(), canvas);
         player.render(canvas);
+        HUD.render(canvas);
         Graphics g = bs.getDrawGraphics();
         g.drawImage(canvas.getImage(), 0, 0, null);
-        g.setFont(new Font(Font.SERIF, 0, 25));
-        g.setColor(Color.black);
-        g.drawString("X: " + (player.getX()) + ", Y: " + (player.getY()), 5, 30);
         g.dispose();
         bs.show();
     }

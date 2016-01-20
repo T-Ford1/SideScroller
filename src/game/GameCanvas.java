@@ -5,7 +5,6 @@ package game;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import display.Interface;
 import input.Keyboard;
 import input.Mouse;
 import java.awt.Canvas;
@@ -21,7 +20,6 @@ import java.awt.image.DataBufferInt;
 public class GameCanvas extends Canvas {
 
     private static final long serialVersionUID = 1L;
-    private Interface HUD;
     private int width, height;
     private BufferedImage image;
     private int[] pixels;
@@ -33,15 +31,15 @@ public class GameCanvas extends Canvas {
 
     public void initRender() {
         requestFocus();
-        setRenderSize(getWidth() - 300, getHeight());
+        setRenderSize(getWidth() - 300, getHeight() - 200);
     }
-    
+
     public Keyboard addKeys() {
         Keyboard keys = new Keyboard();
         addKeyListener(keys);
         return keys;
     }
-    
+
     public Mouse addMouse() {
         Mouse mouse = new Mouse();
         addMouseListener(mouse);
@@ -49,27 +47,32 @@ public class GameCanvas extends Canvas {
         return mouse;
     }
 
-    public void renderPixels(int xPos, int yPos, int[] pixels, int size, int scale) {
-        for (int y = 0; y < size; y++) {
+    public void renderPixels(int xPos, int yPos, int[] pixels, int width, int height, int scale) {
+        for (int y = 0; y < height; y++) {
             int yOff = y * scale + yPos;
-            for (int x = 0; x < size; x++) {
+            int index = y * width;
+            for (int x = 0; x < width; x++) {
                 int xOff = x * scale + xPos;
-                renderPixel(xOff, yOff, pixels[y * size + x], scale);
+                renderPixel(xOff, yOff, pixels[index + x], scale);
             }
         }
     }
 
     public void renderPixel(int x, int y, int color, int scale) {
-        if(color == 0xff_ff_00_ff) {
+        if (color == 0xff_ff_00_ff) {
             return;
         }
         for (int yOff = y; yOff < scale + y; yOff++) {
+            int index = yOff * getWidth();
+            if (yOff < 0 || yOff >= height) {
+                return;
+            }
             for (int xOff = x; xOff < scale + x; xOff++) {
-                if (yOff < 0 || yOff >= height || xOff < 0 || xOff >= width) {
+                if (xOff < 0 || xOff >= width) {
                     return;
-                    //the pixel is out of the screen area
                 }
-                pixels[yOff * width + xOff] = color;
+                //the pixel is out of the screen area
+                pixels[index + xOff] = color;
             }
         }
     }
@@ -78,25 +81,18 @@ public class GameCanvas extends Canvas {
         return image;
     }
 
-    public void clear() {
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = Color.black.getRGB();
-        }
-    }
-    
     public int getRenderHeight() {
         return height;
     }
-    
+
     public int getRenderWidth() {
         return width;
     }
-    
+
     public void setRenderSize(int w, int h) {
         width = w;
         height = h;
-        HUD = new Interface(getWidth(), getHeight(), getWidth() - w, getHeight() - w);
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
     }
 }

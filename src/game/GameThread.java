@@ -15,6 +15,7 @@ public class GameThread extends Thread {
     private boolean running;
     
     public GameThread(Game g) {
+        super("GameThread");
         frame = g;
     }
     

@@ -38,7 +38,7 @@ public class WizardProjectile extends Projectile {
         if (!removed) {
             int rndX = getRelativeX() + getRenderX() + Game.SCALE * 11;
             int rndY = getRelativeY() + getRenderY() + Game.SCALE * 10;
-            c.renderPixels(rndX, rndY, animation.getSprite(img, anim).getPixels(), animation.SIZE, size);
+            c.renderPixels(rndX, rndY, animation.getSprite(img, anim).getPixels(), animation.SIZE, animation.SIZE, size);
         }
     }
 
