@@ -5,6 +5,7 @@ package game;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import display.Interface;
 import input.Keyboard;
 import input.Mouse;
 import java.awt.Canvas;
@@ -20,6 +21,7 @@ import java.awt.image.DataBufferInt;
 public class GameCanvas extends Canvas {
 
     private static final long serialVersionUID = 1L;
+    private Interface HUD;
     private int width, height;
     private BufferedImage image;
     private int[] pixels;
@@ -31,11 +33,7 @@ public class GameCanvas extends Canvas {
 
     public void initRender() {
         requestFocus();
-        width = getWidth();
-        height = getHeight();
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-        
+        setRenderSize(getWidth() - 300, getHeight());
     }
     
     public Keyboard addKeys() {
@@ -97,5 +95,8 @@ public class GameCanvas extends Canvas {
     public void setRenderSize(int w, int h) {
         width = w;
         height = h;
+        HUD = new Interface(getWidth(), getHeight(), getWidth() - w, getHeight() - w);
+        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
     }
 }

@@ -49,9 +49,9 @@ public abstract class Level {
     public void render(int xPos, int yPos, GameCanvas frame) {
         int step = Game.SIZE * Game.SCALE;
         int xLeft = xPos / step;
-        int xRight = (xPos + frame.getWidth()) / step;
+        int xRight = (xPos + frame.getRenderWidth()) / step;
         int yTop = yPos / step;
-        int yBottom = (yPos + frame.getHeight()) / step;
+        int yBottom = (yPos + frame.getRenderHeight()) / step;
         //choosing the first and last tiles to render
         for (int y = yTop - 1; y <= yBottom; y++) {
             for (int x = xLeft - 1; x <= xRight; x++) {

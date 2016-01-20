@@ -26,7 +26,7 @@ public abstract class Projectile extends Entity {
     private final double xStep, yStep;
 
     public Projectile(Level l, Mob s, int spwnX, int spwnY, double t) {
-        super(l, spwnX, spwnY, s.getRenderX(), s.getRenderY());
+        super(l, spwnX, spwnY, 0, 0);
         theta = t;
         speed = 10;
         source = s;
@@ -65,5 +65,13 @@ public abstract class Projectile extends Entity {
     
     public int getRelativeY() {
         return getY() - relativeY;
+    }
+    
+    public int getRenderX() {
+        return source.getRenderX();
+    }
+    
+    public int getRenderY() {
+        return source.getRenderY();
     }
 }

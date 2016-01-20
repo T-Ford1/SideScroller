@@ -47,9 +47,8 @@ public class Game extends JFrame {
         add(canvas = new GameCanvas());
         pack();
         canvas.initRender();
-        canvas.setRenderSize(canvas.getWidth(), canvas.getHeight());
         player = new Player(level, canvas.addKeys(), canvas.addMouse(), 50 * SIZE * SCALE, 50 * SIZE * SCALE, 
-                canvas.getWidth() / 2 - SIZE, canvas.getHeight() / 2 - SIZE);
+                canvas.getRenderWidth() / 2 - SIZE, canvas.getRenderHeight() / 2 - SIZE);
         canvas.createBufferStrategy(3);
         bs = canvas.getBufferStrategy();
         thread = new GameThread(this);
@@ -62,7 +61,7 @@ public class Game extends JFrame {
     }
 
     public void render() {
-        canvas.clear();
+        //canvas.clear();
         level.render(player.getX() - player.getRenderX(), player.getY() - player.getRenderY(), canvas);
         player.render(canvas);
         Graphics g = bs.getDrawGraphics();
