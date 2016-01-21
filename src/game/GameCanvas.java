@@ -47,32 +47,45 @@ public class GameCanvas extends Canvas {
         return mouse;
     }
 
-    public void renderPixels(int xPos, int yPos, int[] pixels, int width, int height, int scale) {
+    public void renderDisplay(int xPos, int yPos, int[] pixels, int width, int height) {
         for (int y = 0; y < height; y++) {
-            int yOff = y * scale + yPos;
+            int yOff = y + yPos;
             int index = y * width;
-            for (int x = 0; x < width; x++) {
-                int xOff = x * scale + xPos;
-                renderPixel(xOff, yOff, pixels[index + x], scale);
+            for (int x = 0; x < width; x++, index++) {
+                int xOff = x + xPos;
+                this.pixels[yOff * getWidth() + xOff] = pixels[index];
             }
         }
     }
 
-    public void renderPixel(int x, int y, int color, int scale) {
+    public void renderPixels(int xPos, int yPos, int[] pixels, int width, int height, int scale) {
+        for (int y = 0; y < height; y++) {
+            int yOff = y * scale + yPos;
+            int index = y * width;
+            if (yOff < 0 || yOff >= getRenderHeight()) {
+                continue;
+            }
+            for (int x = 0; x < width; x++, index++) {
+                int xOff = x * scale + xPos;
+                if (xOff < 0 || xOff >= getRenderWidth()) {
+                    continue;
+                }
+                renderPixel(yOff * getWidth() + xOff, pixels[index], scale);
+            }
+        }
+    }
+
+    private void renderPixel(int index, int color, int scale) {
         if (color == 0xff_ff_00_ff) {
             return;
         }
-        for (int yOff = y; yOff < scale + y; yOff++) {
-            int index = yOff * getWidth();
-            if (yOff < 0 || yOff >= height) {
-                return;
-            }
-            for (int xOff = x; xOff < scale + x; xOff++) {
-                if (xOff < 0 || xOff >= width) {
-                    return;
+        for (int yOff = 0; yOff < scale; yOff++) {
+            int index2 = yOff * getWidth() + index;
+            for (int xOff = 0; xOff < scale; xOff++, index2++) {
+                if (index2 < 0 | index2 >= pixels.length) {
+                    continue;
                 }
-                //the pixel is out of the screen area
-                pixels[index + xOff] = color;
+                pixels[index2] = color;
             }
         }
     }
